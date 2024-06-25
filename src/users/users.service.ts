@@ -22,8 +22,6 @@ export class UsersService {
   }
 
   async findUser(findUserParams: FindUserParams): Promise<User> {
-    return this.userRepository.findOneBy({
-      email: findUserParams.email,
-    });
+    return this.userRepository.findOneBy(findUserParams);
   }
 }

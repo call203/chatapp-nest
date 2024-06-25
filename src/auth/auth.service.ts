@@ -13,6 +13,7 @@ export class AuthService {
     const user = await this.userSerivce.findUser({ email: userDetails.email });
     if (!user)
       throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
-    return compareHash(userDetails.password, user.password);
+    const isPassword = compareHash(userDetails.password, user.password);
+    return isPassword ? user : null;
   }
 }
