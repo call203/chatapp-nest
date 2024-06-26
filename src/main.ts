@@ -9,6 +9,8 @@ import { Session } from './utils/typeorm/entities/Session';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const sessionRepository = app.get(DataSource).getRepository(Session);
+  app.setGlobalPrefix('api');
+  app.enableCors({ origin: ['http://localhost:3000'], credentials: true });
   const { PORT, COOKIE_SECRET } = process.env;
   app.use(
     session({
