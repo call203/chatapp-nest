@@ -22,6 +22,8 @@ export class UsersService {
   }
 
   async findUser(findUserParams: FindUserParams): Promise<User> {
-    return this.userRepository.findOneBy(findUserParams);
+    return this.userRepository.findOne({
+      where: findUserParams,
+    });
   }
 }

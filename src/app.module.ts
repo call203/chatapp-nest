@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import entities from './utils/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { Session } from './utils/typeorm';
+import { ConversationsModule } from './conversations/conversations.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { Session } from './utils/typeorm';
       entities,
     }),
     TypeOrmModule.forFeature([Session]),
+    ConversationsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
