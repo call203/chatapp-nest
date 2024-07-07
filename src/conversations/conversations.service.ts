@@ -26,7 +26,7 @@ export class ConversationsService implements IConversationService {
         'creator.lastName',
         'creator.email',
       ])
-      .leftJoin('conversation.receipient', 'recipient')
+      .leftJoin('conversation.recipient', 'recipient')
       .addSelect([
         'recipient.id',
         'recipient.firstName',
@@ -70,6 +70,9 @@ export class ConversationsService implements IConversationService {
   }
 
   async findConversationById(id: number): Promise<Conversation> {
-    return this.conversationRepostitory.findOne({ where: { id } });
+    return this.conversationRepostitory.findOne({
+      where: { id },
+      relations: ['messages', 'lastMessageSent'],
+    });
   }
 }

@@ -10,6 +10,7 @@ import entities from './utils/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { Session } from './utils/typeorm';
 import { ConversationsModule } from './conversations/conversations.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -17,6 +18,8 @@ import { ConversationsModule } from './conversations/conversations.module';
     PassportModule.register({ session: true }),
     AuthModule,
     UsersModule,
+    ConversationsModule,
+    MessagesModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.MYSQL_DB_HOST,
@@ -28,7 +31,6 @@ import { ConversationsModule } from './conversations/conversations.module';
       entities,
     }),
     TypeOrmModule.forFeature([Session]),
-    ConversationsModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
