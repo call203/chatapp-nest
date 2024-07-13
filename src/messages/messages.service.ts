@@ -36,7 +36,7 @@ export class MessagesService implements IMeesageService {
     const savedMessage = await this.messageRepository.save(newMessage);
     conversation.lastMessageSent = savedMessage;
     await this.conversationRepository.save(conversation);
-    return;
+    return savedMessage;
   }
   getMessagesByConversationId(conversationId: number): Promise<Message[]> {
     return this.messageRepository.find({

@@ -11,6 +11,8 @@ import { PassportModule } from '@nestjs/passport';
 import { Session } from './utils/typeorm';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
+import { GatewayModule } from './gateway/gateway.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -20,6 +22,7 @@ import { MessagesModule } from './messages/messages.module';
     UsersModule,
     ConversationsModule,
     MessagesModule,
+    GatewayModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.MYSQL_DB_HOST,
@@ -31,6 +34,7 @@ import { MessagesModule } from './messages/messages.module';
       entities,
     }),
     TypeOrmModule.forFeature([Session]),
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],
