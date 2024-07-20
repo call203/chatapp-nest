@@ -17,10 +17,11 @@ export class ConversationsController {
     @AuthUser() user: User,
     @Body() createConversationPayload: CreateConversationDto,
   ) {
-    return this.conversationService.createConversation(
+    const res = await this.conversationService.createConversation(
       user,
       createConversationPayload,
     );
+    return { id: res.id };
   }
   @Get()
   async getConversations(@AuthUser() { id }: User) {
