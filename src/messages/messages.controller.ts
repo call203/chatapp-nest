@@ -5,6 +5,7 @@ import { AuthUser } from 'src/utils/decorators';
 import { User } from 'src/utils/typeorm';
 import { CreateMessageDto } from './dtos/CreateMessage.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller(Routes.MESSAGES)
 export class MessagesController {
@@ -23,14 +24,22 @@ export class MessagesController {
       user,
     });
 
-    this.eventEmitter.emit('message.create', msg);
+    this.eventEmitter.emit('message.create', {
+      message: msg,
+      conversation: msg.conversation,
+    });
+
     return;
   }
   @Get(':conversationId')
-  getMessagesFromConversation(
+  async getMessagesFromConversation(
     @AuthUser() user: User,
-    @Param('conversationId') conversationId: number,
+    @Param('conversationId', ParseIntPipe) conversationId: number,
   ) {
-    return this.messageService.getMessagesByConversationId(conversationId);
+    const messages = await this.messageService.getMessagesByConversationId(
+      conversationId,
+    );
+
+    return { conversationId, messages };
   }
 }

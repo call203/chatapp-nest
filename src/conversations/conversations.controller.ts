@@ -4,12 +4,14 @@ import { IConversationService } from './conversations';
 import { CreateConversationDto } from './dtos/CreateConversations.dto';
 import { AuthUser } from 'src/utils/decorators';
 import { User } from 'src/utils/typeorm';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Controller(Routes.CONVERSATIONS)
 export class ConversationsController {
   constructor(
     @Inject(Services.CONVERSATIONS)
     private readonly conversationService: IConversationService,
+    private readonly events: EventEmitter2,
   ) {}
 
   @Post()
@@ -17,11 +19,12 @@ export class ConversationsController {
     @AuthUser() user: User,
     @Body() createConversationPayload: CreateConversationDto,
   ) {
-    const res = await this.conversationService.createConversation(
+    const conversation = await this.conversationService.createConversation(
       user,
       createConversationPayload,
     );
-    return { id: res.id };
+    this.events.emit('conversation.create', conversation);
+    return conversation;
   }
   @Get()
   async getConversations(@AuthUser() { id }: User) {
