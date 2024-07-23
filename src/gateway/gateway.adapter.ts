@@ -28,6 +28,7 @@ export class WebsocketAdapter extends IoAdapter {
       }
 
       const { CHAT_APP_SESSION_ID } = cookie.parse(clientCookie);
+
       if (!CHAT_APP_SESSION_ID) {
         console.log('CHAT_APP_SESSION_ID DOES NOT EXIST');
         return next(new Error('Not Authenticated'));
@@ -47,6 +48,7 @@ export class WebsocketAdapter extends IoAdapter {
         JSON.parse(sessionDB.json).passport.user,
       );
       socket.user = userDB;
+
       next();
     });
     return server;

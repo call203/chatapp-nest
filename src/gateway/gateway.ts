@@ -30,6 +30,7 @@ export class MessagingGateway implements OnGatewayConnection {
 
   handleConnection(socket: AuthenticatedSocket, ...args: any[]) {
     this.sessions.setUserSocket(socket?.user?.id, socket);
+    console.log('Connected to ' + socket.user.id);
     socket.emit('connected', {});
   }
 
@@ -47,9 +48,19 @@ export class MessagingGateway implements OnGatewayConnection {
     client.to(data.conversationId).emit('userJoin');
   }
 
+  @SubscribeMessage('onConversationLeave')
+  onConversationLeave(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    client.leave(data.conversationId);
+    client.to(data.conversationId).emit('userLeave');
+  }
+
   @OnEvent('conversation.create')
   handleConversationCreateEvent(payload: Conversation) {
     const recipientSocket = this.sessions.getUserSocket(payload.recipient.id);
+
     console.log('Conversation Session Created');
     if (recipientSocket) recipientSocket.emit('onConversation', payload);
   }
