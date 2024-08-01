@@ -16,7 +16,7 @@ import { CreateUserDto } from './dtos/CreateUser.dto';
 import { instanceToPlain } from 'class-transformer';
 import { AuthenticatedGuard, LocalAuthGuard } from './utils/Gauard';
 import { Response, Request } from 'express';
-import { User } from 'src/utils/typeorm';
+import { AuthenticatedRequest } from '../utils/types';
 @Controller(Routes.AUTH)
 export class AuthController {
   constructor(
@@ -43,5 +43,10 @@ export class AuthController {
   }
 
   @Post('logout')
-  logout() {}
+  @UseGuards(AuthenticatedGuard)
+  logout(@Req() req: AuthenticatedRequest, @Res() res: Response) {
+    req.logout((err) => {
+      return err ? res.send(400) : res.send(200);
+    });
+  }
 }

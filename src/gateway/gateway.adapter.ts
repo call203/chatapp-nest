@@ -21,7 +21,6 @@ export class WebsocketAdapter extends IoAdapter {
     const server = super.createIOServer(port, options);
 
     server.use(async (socket: AuthenticatedSocket, next) => {
-      console.log('Socket middleware');
       const { cookie: clientCookie } = socket.handshake.headers;
       if (!clientCookie) {
         return next(new Error('Not Authenticated. No cookie'));

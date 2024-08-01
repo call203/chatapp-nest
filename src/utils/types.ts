@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { Conversation, Message, User } from './typeorm';
 
 export type CreateUserDetails = {
@@ -45,3 +46,8 @@ export type CreateMessageResponse = {
   message: Message;
   conversation: Conversation;
 };
+
+export interface AuthenticatedRequest extends Request {
+  user: User;
+  logout: (callback: (err: Error) => void) => void;
+}

@@ -6,6 +6,7 @@ import { DataSource } from 'typeorm';
 import { TypeormStore } from 'connect-typeorm';
 import { Session } from './utils/typeorm/entities/Session';
 import { WebsocketAdapter } from './gateway/gateway.adapter';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,8 +14,9 @@ async function bootstrap() {
   const sessionRepository = dataSource.getRepository(Session);
   const adapter = new WebsocketAdapter(app, dataSource);
   app.setGlobalPrefix('api');
-  app.useWebSocketAdapter(adapter);
   app.enableCors({ origin: ['http://localhost:3000'], credentials: true });
+  app.useGlobalPipes(new ValidationPipe());
+  app.useWebSocketAdapter(adapter);
   const { PORT, COOKIE_SECRET } = process.env;
   app.use(
     session({

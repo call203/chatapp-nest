@@ -34,11 +34,6 @@ export class MessagingGateway implements OnGatewayConnection {
     socket.emit('connected', {});
   }
 
-  @SubscribeMessage('createMessage')
-  handleCreateMessage(@MessageBody() data: any) {
-    console.log('Create Message');
-  }
-
   @SubscribeMessage('onConversationJoin')
   onConversationJoin(
     @MessageBody() data: any,
@@ -46,6 +41,11 @@ export class MessagingGateway implements OnGatewayConnection {
   ) {
     client.join(data.conversationId);
     client.to(data.conversationId).emit('userJoin');
+  }
+
+  @SubscribeMessage('createMessage')
+  handleCreateMessage(@MessageBody() data: any) {
+    console.log('Create Message');
   }
 
   @SubscribeMessage('onConversationLeave')
@@ -77,6 +77,7 @@ export class MessagingGateway implements OnGatewayConnection {
       author.id === creator.id
         ? this.sessions.getUserSocket(recipient.id)
         : this.sessions.getUserSocket(creator.id);
+
     if (authorSocket) authorSocket.emit('onMessage', payload);
     if (recipientSocket) recipientSocket.emit('onMessage', payload);
   }
