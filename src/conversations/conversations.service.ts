@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Conversation, User } from 'src/utils/typeorm';
 import { Repository } from 'typeorm';
 import { Services } from 'src/utils/constant';
-import { IUserService } from 'src/users/user';
+import { IUserService } from 'src/users/interfaces/user';
 
 @Injectable()
 export class ConversationsService implements IConversationService {

@@ -51,3 +51,8 @@ export interface AuthenticatedRequest extends Request {
   user: User;
   logout: (callback: (err: Error) => void) => void;
 }
+
+export type UpdateUserProfileParams = Partial<{
+  about: string;
+  image: Express.Multer.File;
+}>;

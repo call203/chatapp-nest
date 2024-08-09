@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hashPassword } from 'src/utils/helpers';
-import { User } from 'src/utils/typeorm';
+import { Profile, User } from 'src/utils/typeorm';
 import { CreateUserDetails, FindUserParams } from 'src/utils/types';
 import { Repository } from 'typeorm';
 
@@ -9,6 +9,8 @@ import { Repository } from 'typeorm';
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(Profile)
+    private readonly profileRepository: Repository<Profile>,
   ) {}
   async createUser(userDetails: CreateUserDetails) {
     const existngUser = await this.userRepository.findOneBy({
@@ -17,7 +19,13 @@ export class UsersService {
     if (existngUser)
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     const password = await hashPassword(userDetails.password);
-    const newUser = this.userRepository.create({ ...userDetails, password });
+
+    const newProfile = this.profileRepository.create();
+    const newUser = this.userRepository.create({
+      ...userDetails,
+      password,
+      profile: newProfile,
+    });
     return this.userRepository.save(newUser);
   }
 

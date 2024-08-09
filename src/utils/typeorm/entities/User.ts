@@ -5,9 +5,10 @@ import {
   Column,
   OneToMany,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Message } from './Message';
-
+import { Profile } from './Profile';
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
@@ -29,4 +30,8 @@ export class User {
   @OneToMany(() => Message, (message) => message.author)
   @JoinColumn()
   messages: Message[];
+
+  @OneToOne(() => Profile, { cascade: ['insert', 'update'], eager: true })
+  @JoinColumn()
+  profile: Profile;
 }
