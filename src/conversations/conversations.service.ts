@@ -26,14 +26,18 @@ export class ConversationsService implements IConversationService {
         'creator.firstName',
         'creator.lastName',
         'creator.email',
+        'creator.profile',
       ])
+      .leftJoinAndSelect('creator.profile', 'creatorProfile')
       .leftJoin('conversation.recipient', 'recipient')
       .addSelect([
         'recipient.id',
         'recipient.firstName',
         'recipient.lastName',
         'recipient.email',
+        'recipient.profile',
       ])
+      .leftJoinAndSelect('recipient.profile', 'recipientProfile')
       .where('creator.id = :id', { id })
       .orWhere('recipient.id = :id', { id })
       .getMany();

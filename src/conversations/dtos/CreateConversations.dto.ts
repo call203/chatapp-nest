@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateConversationDto {
   @IsEmail()
@@ -6,5 +12,6 @@ export class CreateConversationDto {
   email: string;
 
   @IsString()
-  message: string;
+  @IsOptional()
+  message?: string;
 }
