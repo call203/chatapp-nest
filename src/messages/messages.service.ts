@@ -3,7 +3,6 @@ import { IMeesageService } from './message';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Conversation, Message } from 'src/utils/typeorm';
 import { Repository } from 'typeorm';
-import { CreateMessageParams } from 'src/utils/types';
 import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
