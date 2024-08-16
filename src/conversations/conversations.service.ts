@@ -11,13 +11,13 @@ import { IUserService } from 'src/users/interfaces/user';
 export class ConversationsService implements IConversationService {
   constructor(
     @InjectRepository(Conversation)
-    private readonly conversationRepostitory: Repository<Conversation>,
+    private readonly conversationRepository: Repository<Conversation>,
     @Inject(Services.USERS)
     private readonly userService: IUserService,
   ) {}
 
   async getConversations(id: number): Promise<Conversation[]> {
-    return this.conversationRepostitory
+    return this.conversationRepository
       .createQueryBuilder('conversation')
       .leftJoinAndSelect('conversation.lastMessageSent', 'lastMessageSent')
       .leftJoin('conversation.creator', 'creator')
@@ -57,7 +57,7 @@ export class ConversationsService implements IConversationService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    const existingConversation = await this.conversationRepostitory.findOne({
+    const existingConversation = await this.conversationRepository.findOne({
       where: [
         { creator: { id: user.id }, recipient: { id: recipient.id } },
         { creator: { id: recipient.id }, recipient: { id: user.id } },
@@ -67,16 +67,16 @@ export class ConversationsService implements IConversationService {
     if (existingConversation)
       throw new HttpException('Conversation exists', HttpStatus.CONFLICT);
 
-    const conversation = this.conversationRepostitory.create({
+    const conversation = this.conversationRepository.create({
       creator: user,
       recipient: recipient,
     });
 
-    return this.conversationRepostitory.save(conversation);
+    return this.conversationRepository.save(conversation);
   }
 
   async findConversationById(id: number): Promise<Conversation> {
-    return this.conversationRepostitory.findOne({
+    return this.conversationRepository.findOne({
       where: { id },
       relations: ['messages', 'lastMessageSent'],
     });

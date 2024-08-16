@@ -56,3 +56,25 @@ export type UpdateUserProfileParams = Partial<{
   about: string;
   image: Express.Multer.File;
 }>;
+
+export type FriendRequestStatus = 'accepted' | 'rejected' | 'pending';
+
+export type CreateFriendParams = {
+  user: User;
+  email: string;
+};
+
+export type FriendAcceptParams = {
+  id: number;
+  userId: number;
+};
+
+export type FriendCancelParams = {
+  id: number;
+  userId: number;
+};
+
+export type FriendRejectParams = {
+  id: number;
+  userId: number;
+};
