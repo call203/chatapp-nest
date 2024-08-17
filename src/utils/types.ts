@@ -59,7 +59,7 @@ export type UpdateUserProfileParams = Partial<{
 
 export type FriendRequestStatus = 'accepted' | 'rejected' | 'pending';
 
-export type CreateFriendParams = {
+export type FriendCreateParams = {
   user: User;
   email: string;
 };
