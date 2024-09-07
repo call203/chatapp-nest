@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { FriendRequestsService } from './friend-requests.service';
 import { Routes, Services } from 'src/utils/constant';
 import { IFriendsRequestsService } from './friend-requests';
@@ -26,5 +36,32 @@ export class FriendRequestsController {
     const params = { user, email };
     await this.friendsRequestService.create(params);
     return;
+  }
+
+  @Patch(':id/accept')
+  async acceptedFriendRequest(
+    @AuthUser() { id: userId }: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const res = await this.friendsRequestService.accept({ id, userId });
+    return res;
+  }
+
+  @Delete(':id/cancel')
+  async cancelFriendRequest(
+    @AuthUser() { id: userId }: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const res = await this.friendsRequestService.cancel({ id, userId });
+    return res;
+  }
+
+  @Patch(':id/reject')
+  async rejectFriendRequest(
+    @AuthUser() { id: userId }: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const res = await this.friendsRequestService.reject({ id, userId });
+    return res;
   }
 }

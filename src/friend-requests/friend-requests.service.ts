@@ -7,7 +7,7 @@ import {
   FriendCreateParams,
 } from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FriendRequest } from 'src/utils/typeorm';
+import { Friend, FriendRequest } from 'src/utils/typeorm';
 import { Services } from 'src/utils/constant';
 import { IUserService } from 'src/users/interfaces/user';
 import { UserNotFoundException } from 'src/users/exceptions/UserNotFound';
@@ -15,11 +15,17 @@ import { FriendRequestPendingException } from './exceptions/FriendRequestPending
 import { FriendRequestException } from './exceptions/FriendRequest';
 import { IFreindsService } from 'src/friends/friends';
 import { FriendAlreadyExistException } from 'src/friends/exceptions/FriendAlreadyExists';
+import { FriendRequestNotFoundException } from './exceptions/FriendRequestNotFound';
+import { FriendRequestAcceptedException } from './exceptions/FriendRequestAccepted';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FriendRequestsService implements IFriendsRequestsService {
   constructor(
-    @InjectRepository(FriendRequest) private readonly friendRequestRepository,
+    @InjectRepository(Friend)
+    private readonly friendRepository: Repository<Friend>,
+    @InjectRepository(FriendRequest)
+    private readonly friendRequestRepository: Repository<FriendRequest>,
     @Inject(Services.USERS)
     private readonly userService: IUserService,
     @Inject(Services.FRIENDS_SERVICES)
@@ -58,14 +64,43 @@ export class FriendRequestsService implements IFriendsRequestsService {
     });
     return this.friendRequestRepository.save(friend);
   }
-  accept(params: FriendAcceptParams) {
-    throw new Error('Method not implemented.');
+
+  async accept({ id, userId }: FriendAcceptParams) {
+    const friendRequest = await this.findById(id);
+    if (!friendRequest) throw new FriendRequestNotFoundException();
+    if (friendRequest.status === 'accepted')
+      throw new FriendRequestAcceptedException();
+    if (friendRequest.receiver.id !== userId)
+      throw new FriendRequestException();
+
+    friendRequest.status = 'accepted';
+    const updatedFriendRequest = await this.friendRequestRepository.save(
+      friendRequest,
+    );
+    const newFriend = this.friendRepository.create({
+      receiver: friendRequest.receiver,
+      sender: friendRequest.sender,
+    });
+    const friend = await this.friendRepository.save(newFriend);
+    return { friend, friendRequest: updatedFriendRequest };
   }
-  cancel(params: FriendCancelParams) {
-    throw new Error('Method not implemented.');
+
+  async cancel({ id, userId }: FriendAcceptParams) {
+    const friendRequest = await this.findById(id);
+    if (!friendRequest) throw new FriendRequestNotFoundException();
+    if (friendRequest.sender.id !== userId) throw new FriendRequestException();
+    await this.friendRequestRepository.delete(id);
+    return friendRequest;
   }
-  reject(params: FriendRejectParams) {
-    throw new Error('Method not implemented.');
+
+  async reject({ id, userId }: FriendAcceptParams) {
+    const friendRequest = await this.findById(id);
+    if (!friendRequest) throw new FriendRequestNotFoundException();
+    if (friendRequest.receiver.id !== userId)
+      throw new FriendRequestException();
+
+    friendRequest.status = 'rejected';
+    return this.friendRequestRepository.save(friendRequest);
   }
 
   isPending(userOneId: number, userTwoId: number) {
@@ -82,6 +117,13 @@ export class FriendRequestsService implements IFriendsRequestsService {
           status: 'pending',
         },
       ],
+    });
+  }
+
+  findById(id: number): Promise<FriendRequest> {
+    return this.friendRequestRepository.findOne({
+      where: { id },
+      relations: ['receiver', 'sender'],
     });
   }
 }

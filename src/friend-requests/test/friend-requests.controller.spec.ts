@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { FriendRequestsController } from './friend-requests.controller';
-import { FriendRequestsService } from './friend-requests.service';
+import { FriendRequestsController } from '../friend-requests.controller';
+import { FriendRequestsService } from '../friend-requests.service';
 
 describe('FriendRequestsController', () => {
   let controller: FriendRequestsController;
