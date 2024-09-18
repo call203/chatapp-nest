@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Conversation, Message, User } from './typeorm';
+import { Conversation, Friend, FriendRequest, Message, User } from './typeorm';
 
 export type CreateUserDetails = {
   email: string;
@@ -62,6 +62,11 @@ export type FriendRequestStatus = 'accepted' | 'rejected' | 'pending';
 export type FriendCreateParams = {
   user: User;
   email: string;
+};
+
+export type AcceptFriendRequestResponse = {
+  friend: Friend;
+  friendRequest: FriendRequest;
 };
 
 export type FriendAcceptParams = {

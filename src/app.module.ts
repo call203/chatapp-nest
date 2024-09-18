@@ -15,6 +15,7 @@ import { GatewayModule } from './gateway/gateway.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { FriendsModule } from './friends/friends.module';
 import { FriendRequestsModule } from './friend-requests/friend-requests.module';
+import { EventModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FriendRequestsModule } from './friend-requests/friend-requests.module';
     GatewayModule,
     FriendsModule,
     FriendRequestsModule,
+    EventModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.MYSQL_DB_HOST,

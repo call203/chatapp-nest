@@ -13,5 +13,6 @@ import { ConversationsModule } from 'src/conversations/conversations.module';
       useClass: GatewaySessionManager,
     },
   ],
+  exports: [MessagingGateway],
 })
 export class GatewayModule {}

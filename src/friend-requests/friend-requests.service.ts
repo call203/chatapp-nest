@@ -82,7 +82,7 @@ export class FriendRequestsService implements IFriendsRequestsService {
       sender: friendRequest.sender,
     });
     const friend = await this.friendRepository.save(newFriend);
-    return { friend, friendRequest: updatedFriendRequest };
+    return { friend: friend, friendRequest: updatedFriendRequest };
   }
 
   async cancel({ id, userId }: FriendAcceptParams) {

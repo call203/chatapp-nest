@@ -23,7 +23,7 @@ import { CreateMessageResponse } from 'src/utils/types';
 export class MessagingGateway implements OnGatewayConnection {
   constructor(
     @Inject(Services.GATEWAY_SESSION_MANAGER)
-    private readonly sessions: IGatewaySessionManager,
+    readonly sessions: IGatewaySessionManager,
   ) {}
   @WebSocketServer()
   server: Server;
