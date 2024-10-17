@@ -13,7 +13,8 @@ import { Services } from 'src/utils/constant';
 import { IGatewaySessionManager } from './gateway.session';
 import { AuthenticatedSocket } from 'src/utils/interfaces';
 import { Conversation } from 'src/utils/typeorm';
-import { CreateMessageResponse } from 'src/utils/types';
+import { CreateMessageResponse, LastReadMessageParams } from 'src/utils/types';
+import { LastreadMessageService } from 'src/lastread-message/lastread-message.service';
 @WebSocketGateway({
   cors: {
     origin: ['http://localhost:3000'],
@@ -24,11 +25,13 @@ export class MessagingGateway implements OnGatewayConnection {
   constructor(
     @Inject(Services.GATEWAY_SESSION_MANAGER)
     readonly sessions: IGatewaySessionManager,
+    @Inject(Services.LASTREAD_MESSAGE)
+    private readonly lastReadMessageService: LastreadMessageService,
   ) {}
   @WebSocketServer()
   server: Server;
 
-  handleConnection(socket: AuthenticatedSocket, ...args: any[]) {
+  handleConnection(socket: AuthenticatedSocket) {
     this.sessions.setUserSocket(socket?.user?.id, socket);
     console.log('Connected to ' + socket.user.id);
     socket.emit('connected', {});
@@ -44,7 +47,7 @@ export class MessagingGateway implements OnGatewayConnection {
   }
 
   @SubscribeMessage('createMessage')
-  handleCreateMessage(@MessageBody() data: any) {
+  handleCreateMessage() {
     console.log('Create Message');
   }
 
@@ -80,5 +83,11 @@ export class MessagingGateway implements OnGatewayConnection {
 
     if (authorSocket) authorSocket.emit('onMessage', payload);
     if (recipientSocket) recipientSocket.emit('onMessage', payload);
+  }
+
+  @SubscribeMessage('TEST')
+  handleReadMessage(@MessageBody() payload: LastReadMessageParams) {
+    // const { user, conversation, message } = payload;
+    this.lastReadMessageService.updateLastReadMessage(payload);
   }
 }

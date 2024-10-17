@@ -3,9 +3,10 @@ import { MessagingGateway } from './gateway';
 import { Services } from 'src/utils/constant';
 import { GatewaySessionManager } from './gateway.session';
 import { ConversationsModule } from 'src/conversations/conversations.module';
+import { LastreadMessageModule } from 'src/lastread-message/lastread-message.module';
 
 @Module({
-  imports: [ConversationsModule],
+  imports: [ConversationsModule, LastreadMessageModule],
   providers: [
     MessagingGateway,
     {

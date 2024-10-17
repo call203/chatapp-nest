@@ -24,6 +24,12 @@ export type CreateConversationParams = Partial<{
   message: string;
 }>;
 
+export type LastReadMessageParams = {
+  user: User;
+  conversation: Conversation;
+  message: Message;
+};
+
 export type FindParticipantParams = Partial<{
   id: number;
 }>;
@@ -45,6 +51,10 @@ export type CreateMessageParams = {
 export type CreateMessageResponse = {
   message: Message;
   conversation: Conversation;
+};
+
+export type ReadLastMessage = {
+  conversationId: number;
 };
 
 export interface AuthenticatedRequest extends Request {

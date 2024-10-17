@@ -3,7 +3,6 @@ import {
   Controller,
   Inject,
   Patch,
-  Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';

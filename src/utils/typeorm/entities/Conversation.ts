@@ -1,12 +1,10 @@
 import {
-  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './User';
 import { Message } from './Message';

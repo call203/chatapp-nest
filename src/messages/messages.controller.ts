@@ -36,9 +36,8 @@ export class MessagesController {
     @AuthUser() user: User,
     @Param('conversationId', ParseIntPipe) conversationId: number,
   ) {
-    const messages = await this.messageService.getMessagesByConversationId(
-      conversationId,
-    );
+    const messages =
+      await this.messageService.getMessagesByConversationId(conversationId);
 
     return { conversationId, messages };
   }

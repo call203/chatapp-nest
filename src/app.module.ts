@@ -16,6 +16,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { FriendsModule } from './friends/friends.module';
 import { FriendRequestsModule } from './friend-requests/friend-requests.module';
 import { EventModule } from './events/events.module';
+import { LastreadMessageModule } from './lastread-message/lastread-message.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { EventModule } from './events/events.module';
     }),
     TypeOrmModule.forFeature([Session]),
     EventEmitterModule.forRoot(),
+    LastreadMessageModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthService],

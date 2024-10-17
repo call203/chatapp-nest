@@ -1,11 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IFriendsRequestsService } from './friend-requests';
-import {
-  FriendRejectParams,
-  FriendAcceptParams,
-  FriendCancelParams,
-  FriendCreateParams,
-} from 'src/utils/types';
+import { FriendAcceptParams, FriendCreateParams } from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Friend, FriendRequest } from 'src/utils/typeorm';
 import { Services } from 'src/utils/constant';
@@ -74,9 +69,8 @@ export class FriendRequestsService implements IFriendsRequestsService {
       throw new FriendRequestException();
 
     friendRequest.status = 'accepted';
-    const updatedFriendRequest = await this.friendRequestRepository.save(
-      friendRequest,
-    );
+    const updatedFriendRequest =
+      await this.friendRequestRepository.save(friendRequest);
     const newFriend = this.friendRepository.create({
       receiver: friendRequest.receiver,
       sender: friendRequest.sender,
