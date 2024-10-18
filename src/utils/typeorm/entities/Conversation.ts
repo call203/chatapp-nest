@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from './User';
 import { Message } from './Message';
+import { MessageLastRead } from './MessageLastRead';
 
 @Entity({ name: 'conversations' })
 export class Conversation {
@@ -34,4 +35,13 @@ export class Conversation {
   @OneToOne(() => Message)
   @JoinColumn({ name: 'last_message_sent' })
   lastMessageSent: Message;
+
+  @OneToMany(
+    () => MessageLastRead,
+    (MessageLastRead) => MessageLastRead.conversation,
+    {
+      cascade: ['insert', 'remove', 'update'],
+    },
+  )
+  messageLastReads: MessageLastRead[];
 }

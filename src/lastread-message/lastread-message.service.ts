@@ -19,7 +19,6 @@ export class LastreadMessageService implements ILastReadMessageService {
         conversation: { id: params.conversation.id },
       },
     });
-    // console.log(exist + ' ' + params.user.id);
     if (exist) {
       exist.lastMessage = params.message;
       await this.messageLastReadRepository.save(exist);

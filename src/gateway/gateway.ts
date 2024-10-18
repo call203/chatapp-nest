@@ -85,9 +85,8 @@ export class MessagingGateway implements OnGatewayConnection {
     if (recipientSocket) recipientSocket.emit('onMessage', payload);
   }
 
-  @SubscribeMessage('TEST')
+  @SubscribeMessage('readMessage')
   handleReadMessage(@MessageBody() payload: LastReadMessageParams) {
-    // const { user, conversation, message } = payload;
     this.lastReadMessageService.updateLastReadMessage(payload);
   }
 }

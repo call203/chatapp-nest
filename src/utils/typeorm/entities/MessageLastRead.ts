@@ -1,8 +1,8 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './User';
@@ -18,11 +18,23 @@ export class MessageLastRead {
   @JoinColumn()
   user: User;
 
-  @OneToOne(() => Conversation)
+  @Column()
+  userId: number;
+
+  @ManyToOne(
+    () => Conversation,
+    (conversation) => conversation.messageLastReads,
+  )
   @JoinColumn()
   conversation: Conversation;
+
+  @Column()
+  conversationId: number;
 
   @ManyToOne(() => Message, (message) => message.id)
   @JoinColumn()
   lastMessage: Message;
+
+  @Column()
+  lastMessageId: number;
 }

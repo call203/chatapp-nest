@@ -30,6 +30,12 @@ export type LastReadMessageParams = {
   message: Message;
 };
 
+export type updateLastReadMessageIdPararms = {
+  userId: number;
+  conversationId: number;
+  messageId: number;
+};
+
 export type FindParticipantParams = Partial<{
   id: number;
 }>;
