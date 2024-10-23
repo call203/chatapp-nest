@@ -36,7 +36,7 @@ This is the backend for the [Chat Platform React](https://github.com/call203/cha
 4. Run `npm run start:dev` depending on which package manager you use to start the project in development mode.
 
 
-This work is based on [Chat platform eduction](https://github.com/stuyy/chat-platform-react)
+This work is based on [chat platform open source project](https://github.com/stuyy/chat-platform-react)
 
 
 
