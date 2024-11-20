@@ -1,4 +1,4 @@
-# Chat Platform AI
+# Chat Platform 
 This is the backend for the [Chat Platform React](https://github.com/call203/chatapp-react) project.
 
 # 🔧 How to Install
